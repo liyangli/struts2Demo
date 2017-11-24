@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+<struts>
+    <constant name="struts.devMode" value="false"/>
+    <package name="basicstruts2" extends="struts-default">
+        <action name="index">
+            <result>/index.jsp</result>
+        </action>
+
+        <action name="hello" class="com.ylisoftware.action.HelloWorldAction" method="execute">
+            <result name="success">/HelloWorld.jsp</result>
+        </action>
+    </package>
+    <package name="user" extends="struts-default">
+        <action name="login" class="com.ylisoftware.action.UserAction" method="login">
+            <result>
+                /success.jsp
+            </result>
+            <result name="input">/form.jsp</result>
+        </action>
+    </package>
+
+    <package name="interceptor" extends="struts-default">
+        <interceptors>
+            <interceptor name="userInterceptor" class="com.ylisoftware.interceptor.UserInterceptor"/>
+            <interceptor-stack name="userStack">
+                <interceptor-ref name="defaultStack"/>
+                <interceptor-ref name="userInterceptor"/>
+            </interceptor-stack>
+        </interceptors>
+        <action name="interceprotDemo" class="com.ylisoftware.action.UserAction" method="login">
+            <interceptor-ref name="userStack"/>
+            <result>/success.jsp</result>
+        </action>
+    </package>
+
+    <package name="upload" extends="struts-default">
+        <action name="upload" class="com.ylisoftware.action.UploadAction">
+            <result name="success">/success.jsp</result>
+            <result name="error" type="redirect">/error.jsp</result>
+            <result name="input" >/upload.jsp</result>
+            <interceptor-ref name="fileUpload">
+                <param name="allowedExtensions">
+                    .sql,.gif
+                </param>
+                <param name="maximumSize">
+                    1024*1024
+                </param>
+            </interceptor-ref>
+            <interceptor-ref name="defaultStack"/>
+        </action>
+
+        <action name="multUpload" class="com.ylisoftware.action.MultUploadAction">
+            <result>/success.jsp</result>
+        </action>
+    </package>
+
+    <package name="ajax" extends="struts-default,json-default">
+        <action name="noReturnAjax" class="com.ylisoftware.action.AjaxAction" method="noReturnAjax">
+        </action>
+        <action name="streamAjax" class="com.ylisoftware.action.AjaxAction" method="streamAjax">
+            <result type="stream">
+                <param name="contentType">text/html;charset=utf-8</param>
+                <param name="inputName">inputStream</param>
+            </result>
+        </action>
+        <action name="jsonAjax" class="com.ylisoftware.action.AjaxAction" method="jsonAjax">
+            <result  type="json">
+                <param name="root">user</param>
+            </result>
+        </action>
+    </package>
+
+    <package name="tags" extends="struts-default">
+        <action name="strutsTag" class="com.ylisoftware.action.TagsAction">
+            <result>/strutsTag.jsp</result>
+        </action>
+    </package>
+    <package name="i18n" extends="struts-default">
+
+        <action name="lang" class="com.ylisoftware.action.LangAction">
+            <result>i18n.jsp</result>
+        </action>
+    </package>
+</struts>
